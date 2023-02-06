@@ -15,22 +15,35 @@ var getElementsByClassName = function(className, element) {
 // define empty array
   var result = [];
   // create variable parentElement - if parentElement use, else use document body
-  var parentElement = element || document.body;
+  if (!element) {
+    var parentElement = document.body;
+  } else {
+    parentElement = element;
+  }
+
   // recurse case
   // iterate over the document
-  for (var i = 0; i < parentElement.childNodes.length; i++) {
-    // if current element is a parent node
-    if (parentElement.childNodes) {
-      // concat result array with result of recursed call function, passing in parent element (may need className again)
-      result = result.concat(getElementsByClassName(className, parentElement));
-    } else {
-      // base case
-      // element is not parent
-      // push the element to empty array
-      result.push(parentElement);
-    }
-
+  // if current element is a parent node
+  if (_.contains(parentElement.classList, className)){
+    result.push(parentElement);
   }
+
+  if (parentElement.childNodes) {
+    parentElement.childNodes.forEach(function (child) {
+      // concat result array with result of recursed call function, passing in parent element (may need className again)
+      result = result.concat(getElementsByClassName(className, child));
+    })
+  }
+
+  // else {
+  //     // base case
+  //     // element is not parent
+  //     // push the element to empty array
+  //   if (parentElement.classList.contains(className)){
+  //       result.push(parentElement);
+  //   }
+  // }
   // return result array
   return result;
 };
+
